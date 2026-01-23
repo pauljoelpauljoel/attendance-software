@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mix-N-Fix Attendance</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #020617;
+      --card-soft: #020617;
+      --border: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #00ffea;
+      --primary-hover: #3b82f6;
+      --danger: #f97373;
+      --success: #22c55e;
+      --table-header: #020617;
+      --table-row: #020617;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 16px 64px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .4);
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .card-text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .input::placeholder {
+      color: #4b5563;
+    }
+
+    .input:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 1px;
+      border-color: transparent;
+    }
+
+    .btn {
+      width: 100%;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      background: var(--primary);
+      color: #0b1120;
+      transition: background .15s ease, transform .05s ease;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn:active {
+      transform: scale(.98);
+    }
+
+    .btn-secondary {
+      margin-top: 10px;
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(96, 165, 250, 0.1);
+    }
+
+    .message {
+      margin-top: 10px;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+
+    .message.success {
+      background: rgba(34, 197, 94, .12);
+      color: var(--success);
+    }
+
+    .message.error {
+      background: rgba(248, 113, 113, .12);
+      color: var(--danger);
+    }
+
+    .table-wrapper {
+      margin-top: 10px;
+      border-radius: 14px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 900px;
+    }
+
+    thead {
+      background: var(--table-header);
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      font-weight: 500;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    tbody tr {
+      background: var(--table-row);
+    }
+
+    tbody tr+tr td {
+      border-top: 1px solid var(--border);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(34, 197, 94, .15);
+      color: var(--success);
+    }
+
+    .action-btn {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--danger);
+      cursor: pointer;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media(min-width:700px) {
+      .page {
+        padding-top: 40px;
+      }
+
+      .btn {
+        width: 260px;
+      }
+
+      .btn-secondary {
+        width: 260px;
+      }
+    }
+
+    /* Theme Variables */
+    [data-theme="light"] {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --card-soft: #f9fafb;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --table-header: #f9fafb;
+      --table-row: #ffffff;
+    }
+
+    [data-theme="light"] .input {
+      background: #ffffff;
+      color: #1f2937;
+    }
+
+    .theme-switcher {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 8px;
+      background: var(--card);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .theme-btn:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="theme-switcher">
+    <button class="theme-btn" onclick="setTheme('light')">Light</button>
+    <button class="theme-btn" onclick="setTheme('dark')">Dark</button>
+    <button class="theme-btn" onclick="setTheme('system')">System</button>
+  </div>
+
+  <div class="page">
+    <!-- Header with Logo -->
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
+      <img src="logo.jpg" alt="Mix-n-Fix Logo"
+        style="height: 100px; width: 100px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); border-radius: 12px;">
+      <h1 style="font-size: 40px; margin: 0; color: var(--text);">
+        Mix-N-Fix Attendance
+      </h1>
+    </div>
+
+    <!-- Top card -->
+    <div class="card">
+      <h1>Mark Attendance</h1>
+
+
+      <label class="field-label" for="regNumber">Registration Number</label>
+      <input id="regNumber" class="input" type="text" placeholder="e.g., 2024-CS-001" />
+
+      <button class="btn" onclick="markPresent()">Mark Present</button>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <button class="btn btn-secondary" onclick="downloadPDF()" style="margin-top: 0;">
+          Download PDF
+        </button>
+        <button class="btn btn-secondary" onclick="openAddStudentModal()" style="margin-top: 0;">
+          Add New Student
+        </button>
+      </div>
+
+      <div id="message" class="message" style="display:none"></div>
+    </div>
+
+    <!-- Today card -->
+    <div class="card" id="attendanceCard">
+      <div class="card-title">Today's Attendance</div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Reg. Number</th>
+              <th>Name</th>
+              <th>Year</th>
+              <th>Department</th>
+              <th>Shift</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceBody">
+            <tr class="empty-row">
+              <td colspan="8" class="empty-state">
+                No students to display. Enter a registration number above.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Student Modal -->
+  <div id="addStudentModal" class="modal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
+    <div class="card" style="width: 90%; max-width: 500px; margin: 0; max-height: 90vh; overflow-y: auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="font-size:20px;">Add New Student</h2>
+        <button onclick="closeAddStudentModal()"
+          style="background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer;">&times;</button>
+      </div>
+
+      <label class="field-label">Name</label>
+      <input id="newName" class="input" type="text" placeholder="e.g., John Doe" style="margin-bottom:10px;" />
+
+      <label class="field-label">Registration Number</label>
+      <input id="newReg" class="input" type="text" placeholder="e.g., 241DA024" style="margin-bottom:10px;" />
+
+      <label class="field-label">Class</label>
+      <select id="newClass" class="input" style="margin-bottom:10px;">
+        <option value="First Year">First Year</option>
+        <option value="Second Year">Second Year</option>
+        <option value="Third Year">Third Year</option>
+      </select>
+
+      <label class="field-label">Shift</label>
+      <select id="newShift" class="input" style="margin-bottom:10px;">
+        <option value="Morning">Morning</option>
+        <option value="Evening">Evening</option>
+      </select>
+
+      <label class="field-label">Email</label>
+      <input id="newEmail" class="input" type="email" placeholder="e.g., john@example.com"
+        style="margin-bottom:10px;" />
+
+      <label class="field-label">Department</label>
+      <input id="newDept" class="input" type="text" placeholder="e.g., BCA" style="margin-bottom:10px;" />
+
+
+      <button class="btn" onclick="submitNewStudent()">Add & Mark Present</button>
+      <div id="addMessage" class="message" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- load dataset (students array) -->
+  <script src="script.js"></script>
+
+  <!-- html2pdf library from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- main logic -->
+  <script>
+    // Logic moved to script.js
+  </script>
+</body>
+
+</html>
